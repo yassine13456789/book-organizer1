@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>منظّم كتب الوالد</title>
+<style>
+/* الخط محلي، وإن لم يوجد يُستخدم خط عربي من النظام */
+@font-face{font-family:Cairo;font-weight:400;src:url(fonts/cairo-arabic-400-normal.woff2) format("woff2");font-display:swap}
+@font-face{font-family:Cairo;font-weight:600;src:url(fonts/cairo-arabic-600-normal.woff2) format("woff2");font-display:swap}
+@font-face{font-family:Cairo;font-weight:700;src:url(fonts/cairo-arabic-700-normal.woff2) format("woff2");font-display:swap}
+@font-face{font-family:Cairo;font-weight:800;src:url(fonts/cairo-arabic-800-normal.woff2) format("woff2");font-display:swap}
+:root{--bg:#F6F1E7;--card:#fffdf8;--ink:#2b2118;--mut:#6f6354;--line:#e2d6c0;--brand:#4A3426;--gold:#B07A2A;--red:#9a2f2f}
+[data-theme=dark]{--bg:#1a1612;--card:#251f19;--ink:#f1e8d8;--mut:#b3a58f;--line:#3a3128;--brand:#0f0c09;--gold:#d9a04a;--red:#e58a8a}
+*{box-sizing:border-box;margin:0}[hidden]{display:none!important}
+body{font-family:Cairo,"Noto Naskh Arabic",Tahoma,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding-bottom:5rem}
+header{position:sticky;top:0;z-index:20;background:var(--brand);color:#F6F1E7;padding:.8rem 1rem;padding-top:calc(.8rem + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
+header h1{font-size:1.3rem;font-weight:800}header small{display:block;font-size:.75rem;opacity:.75}
+.hb{display:flex;gap:.4rem;flex-wrap:wrap}.sbn{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:1rem;border-color:var(--gold)}#sl{display:grid;gap:.5rem}
+main{max-width:1200px;margin:auto;padding:1rem}
+.pn{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem}
+.top{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:1rem}
+.st{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.7rem;text-align:center}
+.st b{display:block;font-size:1.6rem;color:var(--gold)}.st span,.mu{font-size:.8rem;color:var(--mut)}
+#wq{font-size:1.15rem;font-weight:700;line-height:1.7;margin:.4rem 0}#wa{color:var(--gold);font-weight:600;font-size:.9rem}
+.br{display:grid;grid-template-columns:90px 1fr 24px;align-items:center;gap:.5rem;margin:.4rem 0;font-size:.85rem}
+.br i{display:block;height:10px;border-radius:5px}
+.tool{display:grid;grid-template-columns:2fr 1fr 1fr;gap:.6rem;margin-bottom:1rem}
+.b{border:0;border-radius:8px;padding:.5rem .9rem;font:600 .9rem Cairo,Tahoma,sans-serif;cursor:pointer;background:var(--line);color:var(--ink)}
+.b.p{background:var(--gold);color:#fff}.b.d{color:var(--red)}header .b{background:#ffffff22;color:#F6F1E7}header .b.p{background:var(--gold)}
+.f{width:100%;padding:.6rem .8rem;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit}
+#grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.bk{position:relative;background:var(--card);border-radius:6px;padding:1rem 1.4rem;box-shadow:0 1px 3px #0003;display:flex;flex-direction:column;gap:.2rem}
+.bk::before{content:"";position:absolute;inset-block:0;inset-inline-start:0;width:8px;background:var(--c);border-radius:0 6px 6px 0}
+.bk small{color:var(--c);font-weight:700}.bk h3{font-size:1.1rem;line-height:1.5;word-break:break-word}.bk p{font-size:.85rem;color:var(--mut)}.bk .nt{border-top:1px solid var(--line);padding-top:.4rem;margin-top:.3rem}
+.fv{position:absolute;top:.5rem;inset-inline-end:.6rem;background:none;border:0;font-size:1.4rem;color:var(--red);cursor:pointer}
+.rt button{background:none;border:0;font-size:1.2rem;color:var(--line);cursor:pointer;padding:0 .1rem}.rt .on{color:var(--gold)}
+.ac{display:flex;gap:.4rem;margin-top:auto;padding-top:.6rem}.ac .b{flex:1}
+#empty{text-align:center;padding:3rem 1rem;color:var(--mut);border:2px dashed var(--line);border-radius:10px}
+.md{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#0009;z-index:50;padding:1rem}.md.on{display:flex}
+.md>div{background:var(--card);border-radius:12px;width:100%;max-width:460px;max-height:92vh;overflow:auto;padding:1.2rem;display:grid;gap:.6rem}
+.md h2{font-size:1.1rem}label{font-size:.85rem;font-weight:600}.er{color:var(--red);font-size:.85rem;min-height:1.2em}
+#qb svg{width:240px;max-width:100%;display:block;margin:auto;border:1px solid var(--line)}#qm div,#sm div,#bm div{text-align:center}
+video{width:100%;border-radius:8px;background:#000}textarea.f{min-height:110px}
+#toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);background:#000d;color:#fff;padding:.6rem 1.1rem;border-radius:8px;z-index:99;font-size:.9rem}
+.fab{display:none;position:fixed;bottom:calc(1rem + env(safe-area-inset-bottom));inset-inline-start:1rem;width:56px;height:56px;border-radius:50%;border:0;background:var(--gold);color:#fff;font-size:2rem;box-shadow:0 4px 12px #0005;z-index:30}
+@media(max-width:760px){.top{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.tool{grid-template-columns:1fr 1fr}.tool input{grid-column:1/-1}.fab{display:block}header .p{display:none}}
+@media print{body>*{display:none!important}#qm{display:flex!important;position:static;background:#fff;color:#000}#qm .no{display:none}}
+</style>
+</head>
+<body>
+<header>
+ <div><h1>📚 منظّم كتب الوالد</h1><small>فهرس مكتبتنا المنزلية</small></div>
+ <div class="hb"><button class="b" id="shv">رفوف QR</button><button class="b" id="scan">مسح QR</button><button class="b" id="bkb">نسخ احتياطي</button><button class="b" id="th" aria-label="الوضع الليلي">🌓</button><button class="b p" id="add">إضافة كتاب</button></div>
+</header>
+<main>
+ <section class="top">
+  <div class="pn"><span class="mu">حكمة اليوم · فلسفة القراءة</span><p id="wq"></p><p id="wa"></p><button class="b" id="wn" style="margin-top:.5rem">حكمة أخرى</button></div>
+  <div class="pn"><span class="mu">أكثر التصنيفات في مكتبتك</span><div id="bars"></div></div>
+ </section>
+ <section class="stats" id="stats"></section>
+ <section class="tool">
+  <input class="f" id="q" type="search" placeholder="ابحث بالعنوان أو المؤلف..." autocomplete="off">
+  <select class="f" id="fc"></select>
+  <select class="f" id="fs"><option value="all">كل الحالات</option><option value="u">لم أقرأه</option><option value="r">أقرأه الآن</option><option value="d">قرأته</option><option value="fav">المفضلة ♥</option></select>
+ </section>
+ <div class="pn sbn" id="sb" hidden><span id="sbt"></span><button class="b" id="sbx">عرض كل الكتب</button></div>
+ <div id="grid"></div><div id="empty" hidden></div>
+</main>
+<button class="fab" id="fab" aria-label="إضافة كتاب">+</button>
+
+<!-- نموذج الإضافة والتعديل -->
+<div class="md" id="fm"><div><h2 id="ft"></h2>
+ <form id="form" novalidate style="display:grid;gap:.5rem">
+  <label>عنوان الكتاب *</label><input class="f" id="f_title" maxlength="150">
+  <label>اسم المؤلف *</label><input class="f" id="f_author" maxlength="100">
+  <label>التصنيف</label><select class="f" id="f_category"></select>
+  <label>حالة القراءة</label><select class="f" id="f_st"><option value="u">لم أقرأه</option><option value="r">أقرأه الآن</option><option value="d">قرأته</option></select>
+  <label>سنة النشر (اختياري)</label><input class="f" id="f_year" type="number" inputmode="numeric">
+  <label>رقم الرف أو مكان الحفظ (اختياري)</label><input class="f" id="f_shelf" maxlength="50">
+  <label>ملاحظات (اختياري)</label><textarea class="f" id="f_notes" rows="2" maxlength="500"></textarea>
+  <p class="er" id="err"></p>
+  <div style="display:flex;gap:.5rem"><button class="b p" style="flex:1">حفظ</button><button type="button" class="b" style="flex:1" data-x="1">إلغاء</button></div>
+ </form></div></div>
+<!-- بطاقة QR للكتاب -->
+<div class="md" id="qm"><div><h2 id="qt"></h2><div id="qb"></div><p class="mu" id="qs"></p>
+ <p class="mu no">اطبع الرمز والصقه على الكتاب. عند مسحه يظهر الكتاب في فهرسك.</p>
+ <div class="no" style="display:flex;gap:.5rem"><button class="b p" style="flex:1" onclick="print()">طباعة</button><button class="b" style="flex:1" data-x="1">إغلاق</button></div></div></div>
+<!-- قائمة الرفوف -->
+<div class="md" id="rm"><div><h2>رفوف المكتبة</h2><p class="mu">اختر رفاً لتحصل على رمز QR واحد يحمل كل كتبه. امسحه فتظهر كتب هذا الرف.</p><div id="sl"></div><button class="b" data-x="1">إغلاق</button></div></div>
+<!-- الماسح -->
+<div class="md" id="sm"><div><h2>وجّه الكاميرا نحو رمز QR</h2><video id="vid" playsinline muted></video><button class="b" data-x="1">إغلاق</button></div></div>
+<!-- النسخ الاحتياطي -->
+<div class="md" id="bm"><div><h2>النسخ الاحتياطي</h2><p class="mu">انسخ النص واحفظه في مكان آمن (ملاحظات أو واتساب). للاستعادة الصق النص هنا واضغط «استعادة».</p><textarea class="f" id="bt"></textarea>
+ <div style="display:flex;gap:.5rem"><button class="b p" style="flex:1" id="copy">نسخ</button><button class="b" style="flex:1" id="rest">استعادة</button><button class="b" data-x="1">إغلاق</button></div></div></div>
+<div id="toast" hidden></div>
+
+<script>
+'use strict';
+/*QR-START*/
+// مولّد رمز QR (وضع البايت، مستوى تصحيح L، الإصدارات 1 إلى 10) بدون أي مكتبة خارجية
+function qr(text){
+ const dat=[...new TextEncoder().encode(text)],E=[7,10,15,20,26,18,20,24,30,18],B=[1,1,1,1,1,2,2,2,2,4];
+ const raw=v=>{let r=(16*v+128)*v+64;if(v>1){const n=(v/7|0)+2;r-=(25*n-10)*n-55;if(v>6)r-=36}return r};
+ let v=1;while(v<11&&4+(v<10?8:16)+dat.length*8>((raw(v)>>3)-E[v-1]*B[v-1])*8)v++;
+ if(v>10)throw Error('long');
+ const cap=(raw(v)>>3)-E[v-1]*B[v-1],bits=[],put=(x,n)=>{for(let i=n-1;i>=0;i--)bits.push((x>>>i)&1)};
+ put(4,4);put(dat.length,v<10?8:16);dat.forEach(b=>put(b,8));put(0,Math.min(4,cap*8-bits.length));
+ while(bits.length%8)bits.push(0);
+ const cw=[];for(let i=0;i<bits.length;i+=8)cw.push(parseInt(bits.slice(i,i+8).join(''),2));
+ for(let p=0xEC;cw.length<cap;p^=0xFD)cw.push(p);
+ const mul=(x,y)=>{let z=0;for(let i=7;i>=0;i--){z=(z<<1)^((z>>>7)*0x11D);z^=((y>>>i)&1)*x}return z};
+ const rs=(d,n)=>{const g=Array(n-1).fill(0).concat(1);let r=1;for(let i=0;i<n;i++){for(let j=0;j<n;j++){g[j]=mul(g[j],r);if(j+1<n)g[j]^=g[j+1]}r=mul(r,2)}
+  const o=Array(n).fill(0);d.forEach(b=>{const f=b^o.shift();o.push(0);g.forEach((c,i)=>o[i]^=mul(c,f))});return o};
+ const nb=B[v-1],el=E[v-1],rc=raw(v)>>3,ns=nb-rc%nb,sl=rc/nb|0,blocks=[];
+ for(let i=0,k=0;i<nb;i++){const d=cw.slice(k,k+sl-el+(i<ns?0:1));k+=d.length;const e=rs(d,el);if(i<ns)d.push(0);blocks.push(d.concat(e))}
+ const all=[];for(let i=0;i<blocks[0].length;i++)blocks.forEach((b,j)=>{if(i!=sl-el||j>=ns)all.push(b[i])});
+ const N=v*4+17,mk=()=>Array.from({length:N},()=>Array(N).fill(false)),M=mk(),F=mk();
+ const st=(x,y,d)=>{M[y][x]=d;F[y][x]=true};
+ for(let i=0;i<N;i++){st(6,i,i%2==0);st(i,6,i%2==0)}
+ [[3,3],[N-4,3],[3,N-4]].forEach(([cx,cy])=>{for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const x=cx+dx,y=cy+dy,d=Math.max(Math.abs(dx),Math.abs(dy));if(x>=0&&x<N&&y>=0&&y<N)st(x,y,d!=2&&d!=4)}});
+ if(v>1){const n=(v/7|0)+2,s=Math.ceil((v*4+4)/(n*2-2))*2,a=[6];for(let p=N-7;a.length<n;p-=s)a.splice(1,0,p);
+  a.forEach((x,i)=>a.forEach((y,j)=>{if(!((i==0&&j==0)||(i==0&&j==n-1)||(i==n-1&&j==0)))for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++)st(x+dx,y+dy,Math.max(Math.abs(dx),Math.abs(dy))!=1)}))}
+ if(v>6){let r=v;for(let i=0;i<12;i++)r=(r<<1)^((r>>>11)*0x1F25);const b=(v<<12)|r;for(let i=0;i<18;i++){const a=N-11+i%3,c=i/3|0,x=!!((b>>>i)&1);st(a,c,x);st(c,a,x)}}
+ const fmt=(C,m)=>{const d=8|m;let r=d;for(let i=0;i<10;i++)r=(r<<1)^((r>>>9)*0x537);const b=((d<<10)|r)^0x5412,s=(x,y,i)=>{C[y][x]=!!((b>>>i)&1);F[y][x]=true};
+  for(let i=0;i<6;i++)s(8,i,i);s(8,7,6);s(8,8,7);s(7,8,8);for(let i=9;i<15;i++)s(14-i,8,i);
+  for(let i=0;i<8;i++)s(N-1-i,8,i);for(let i=8;i<15;i++)s(8,N-15+i,i);C[N-8][8]=true;F[N-8][8]=true};
+ fmt(M,0);
+ for(let i=0,r=N-1;r>=1;r-=2){if(r==6)r=5;for(let t=0;t<N;t++)for(let j=0;j<2;j++){const x=r-j,y=((r+1)&2)==0?N-1-t:t;if(!F[y][x]&&i<all.length*8){M[y][x]=!!((all[i>>>3]>>>(7-(i&7)))&1);i++}}}
+ const mf=[(x,y)=>(x+y)%2==0,(x,y)=>y%2==0,(x,y)=>x%3==0,(x,y)=>(x+y)%3==0,(x,y)=>((x/3|0)+(y>>1))%2==0,(x,y)=>x*y%2+x*y%3==0,(x,y)=>(x*y%2+x*y%3)%2==0,(x,y)=>((x+y)%2+x*y%3)%2==0];
+ let best,bs=1e9;
+ mf.forEach((f,m)=>{const C=M.map(r=>r.slice());for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(!F[y][x]&&f(x,y))C[y][x]=!C[y][x];fmt(C,m);
+  let s=0;const run=l=>{let c=1;for(let i=1;i<N;i++){if(l[i]==l[i-1]){c++;if(c==5)s+=3;else if(c>5)s++}else c=1}};
+  C.forEach(run);for(let x=0;x<N;x++)run(C.map(r=>r[x]));if(s<bs){bs=s;best=C}});
+ return best}
+/*QR-END*/
+const qrSvg=t=>{const m=qr(t),n=m.length;let d='';m.forEach((r,y)=>r.forEach((v,x)=>{if(v)d+=`M${x+4} ${y+4}h1v1h-1z`}));return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n+8} ${n+8}" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path d="${d}"/></svg>`};
+
+const $=i=>document.getElementById(i),KEY='parentBooksLibrary.v1';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+const CATS={'روايات':'#9F3A38','كتب دينية':'#2F6B4F','تاريخ':'#8A5A2B','فلسفة':'#7C3F61','تطوير الذات':'#2E5C7E','علوم':'#3D6E6A','أدب وشعر':'#6B4C7A','معاجم ومراجع':'#5A5248','كتب أطفال':'#C27A2C','أخرى':'#8A8178'};
+const ST={u:'لم أقرأه',r:'أقرأه الآن',d:'قرأته'};
+const Q=[['وخير جليس في الزمان كتاب','المتنبي'],['الكتاب نعم الذخر والعقدة، ونعم الجليس والعدة','الجاحظ'],['الحياة التي لا تُفحص لا تستحق أن تُعاش','سقراط'],['اعرف نفسك','نقش معبد دلفي'],['التعليم مرّ الجذور حلو الثمار','أرسطو']];
+let books=load(),edit=null,shelfF=null,qi=new Date()/864e5|0,stream,timer;
+
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]').filter(b=>b&&b.id&&b.title&&b.author).map(b=>({st:'u',rate:0,fav:false,...b}))}catch(x){return[]}}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(books))}catch(x){toast('تعذّر الحفظ، المساحة ممتلئة')}};
+function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,2600)}
+const show=id=>$(id).classList.add('on');
+function close(){document.querySelectorAll('.md.on').forEach(m=>m.classList.remove('on'));clearInterval(timer);if(stream)stream.getTracks().forEach(t=>t.stop());stream=null}
+
+const card=b=>`<article class="bk" style="--c:${CATS[b.category]||'#8A8178'}"><button class="fv" data-a="fav" data-id="${b.id}" aria-label="مفضلة">${b.fav?'♥':'♡'}</button><small>${esc(b.category)} · ${ST[b.st]}</small><h3>${esc(b.title)}</h3><p>${esc(b.author)}</p>${b.year?`<p>سنة النشر: ${b.year}</p>`:''}${b.shelf?`<p>الرف: ${esc(b.shelf)}</p>`:''}<div class="rt">${[1,2,3,4,5].map(n=>`<button data-a="rate" data-id="${b.id}" data-n="${n}" class="${n<=b.rate?'on':''}" aria-label="${n}">★</button>`).join('')}</div>${b.notes?`<p class="nt">${esc(b.notes)}</p>`:''}<div class="ac"><button class="b" data-a="qr" data-id="${b.id}">QR</button><button class="b" data-a="edit" data-id="${b.id}">تعديل</button><button class="b d" data-a="del" data-id="${b.id}">حذف</button></div></article>`;
+
+function render(){
+ const q=$('q').value.trim().toLowerCase(),c=$('fc').value,s=$('fs').value;
+ const l=books.filter(b=>(c=='all'||b.category==c)&&(s=='all'||(s=='fav'?b.fav:b.st==s))&&(!shelfF||(b.shelf||'').trim()==shelfF)&&(!q||(b.title+' '+b.author).toLowerCase().includes(q))).sort((a,b)=>a.title.localeCompare(b.title,'ar'));
+ $('grid').innerHTML=l.map(card).join('');$('sb').hidden=!shelfF;$('sbt').textContent='يعرض الآن كتب الرف: '+shelfF;$('empty').hidden=l.length>0;
+ $('empty').textContent=books.length?'لا توجد نتائج مطابقة.':'لا توجد كتب بعد. اضغط «إضافة كتاب» للبدء.';
+ const n=k=>books.filter(b=>b.st==k).length;
+ $('stats').innerHTML=[['الكتب',books.length],['قرأتها',n('d')],['أقرأها الآن',n('r')],['المفضلة',books.filter(b=>b.fav).length]].map(([k,v])=>`<div class="st"><b>${v}</b><span>${k}</span></div>`).join('');
+ const cnt={};books.forEach(b=>cnt[b.category]=(cnt[b.category]||0)+1);
+ const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5),mx=top[0]?top[0][1]:1;
+ $('bars').innerHTML=top.map(([k,v])=>`<div class="br"><span>${esc(k)}</span><i style="width:${v/mx*100}%;background:${CATS[k]||'#8A8178'}"></i><em>${v}</em></div>`).join('')||'<p class="mu">ستظهر هنا بعد إضافة الكتب.</p>';
+}
+function wisdom(){const[t,a]=Q[qi%Q.length];$('wq').textContent='«'+t+'»';$('wa').textContent='— '+a}
+
+function openForm(b){edit=b?b.id:null;$('ft').textContent=b?'تعديل الكتاب':'إضافة كتاب';
+ ['title','author','category','year','shelf','st','notes'].forEach(k=>$('f_'+k).value=b?(b[k]??''):k=='category'?'أخرى':k=='st'?'u':'');
+ $('err').textContent='';show('fm');$('f_title').focus()}
+$('form').onsubmit=ev=>{ev.preventDefault();
+ const g=k=>$('f_'+k).value.trim(),d={title:g('title'),author:g('author'),category:g('category'),year:g('year'),shelf:g('shelf'),st:g('st'),notes:g('notes')},y=+d.year;let m='';
+ if(!d.title)m='عنوان الكتاب مطلوب.';else if(!d.author)m='اسم المؤلف مطلوب.';
+ else if(d.year&&!(Number.isInteger(y)&&y>=1000&&y<=new Date().getFullYear()+1))m='أدخل سنة نشر صحيحة.';
+ else if(books.some(b=>b.id!=edit&&b.title.trim()==d.title&&b.author.trim()==d.author))m='هذا الكتاب مسجّل مسبقاً.';
+ if(m){$('err').textContent=m;return}
+ const old=books.find(b=>b.id==edit),r={...(old||{rate:0,fav:false}),...d,year:d.year?y:null,id:old?old.id:Date.now().toString(36)+Math.random().toString(36).slice(2,6)};
+ books=old?books.map(b=>b===old?r:b):[r,...books];save();close();render();toast(old?'تم التعديل':'تمت الإضافة')};
+
+function showQR(b){const c=(s,n)=>s.length>n?s.slice(0,n-1)+'…':s;
+ $('qb').innerHTML=qrSvg(`كتاب: ${c(b.title,50)} | ${c(b.author,30)}${b.shelf?' | رف: '+c(b.shelf,15):''} | #${b.id}`);
+ $('qt').textContent=b.title;$('qs').textContent=b.shelf?'الرف: '+b.shelf:'';show('qm')}
+
+// رمز الرف: يحمل أسماء الكتب (ما يتسع منها) وعلامة [[رف:اسم]] يتعرف عليها التطبيق
+function shelves(){const m={};books.forEach(b=>{const k=(b.shelf||'').trim();if(k)m[k]=(m[k]||0)+1});return m}
+function showShelf(k){const bs=books.filter(b=>(b.shelf||'').trim()==k),mk=` [[رف:${k}]]`,len=t=>new TextEncoder().encode(t).length;
+ let t='رف: ',x=0;for(const b of bs){const n=(x?'، ':'')+b.title.slice(0,40);if(len(t+n+'…'+mk)>265)break;t+=n;x++}
+ if(x<bs.length)t+='…';
+ close();$('qb').innerHTML=qrSvg(t+mk);$('qt').textContent='رف '+k;$('qs').textContent=bs.length+' كتاب. امسح الرمز لعرض كل كتب هذا الرف.';show('qm')}
+async function scan(){
+ if(!('BarcodeDetector' in window)){toast('الجهاز لا يدعم المسح هنا، استخدم كاميرا الهاتف العادية');return}
+ try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});const v=$('vid');v.srcObject=stream;await v.play();show('sm');
+  const det=new BarcodeDetector({formats:['qr_code']});
+  timer=setInterval(async()=>{try{const r=await det.detect(v);if(r.length){const raw=r[0].rawValue;close();found(raw)}}catch(x){}},300)
+ }catch(x){close();toast('تعذّر تشغيل الكاميرا، اسمح للتطبيق باستخدامها')}}
+function found(raw){const sh=raw.match(/\[\[رف:([\s\S]+)\]\]\s*$/);
+ if(sh){shelfF=sh[1];$('q').value='';$('fc').value='all';$('fs').value='all';render();toast('تم عرض كتب الرف');return}
+ const m=raw.match(/#([\w-]+)\s*$/),b=m&&books.find(x=>x.id==m[1]);
+ if(b){$('q').value=b.title;$('fc').value='all';$('fs').value='all';render();toast('تم العثور على الكتاب')}else alert('الرمز غير مرتبط بفهرسك:\n'+raw)}
+
+$('grid').onclick=ev=>{const t=ev.target.closest('[data-a]');if(!t)return;const b=books.find(x=>x.id==t.dataset.id);if(!b)return;const a=t.dataset.a;
+ if(a=='edit')openForm(b);else if(a=='qr')showQR(b);
+ else if(a=='del'){if(confirm('حذف «'+b.title+'»؟ لا يمكن التراجع.')){books=books.filter(x=>x!==b);save();render();toast('تم الحذف')}}
+ else if(a=='fav'){b.fav=!b.fav;save();render()}
+ else if(a=='rate'){const n=+t.dataset.n;b.rate=b.rate==n?0:n;save();render()}};
+document.addEventListener('click',ev=>{if(ev.target.dataset.x||ev.target.classList.contains('md'))close()});
+document.addEventListener('keydown',ev=>{if(ev.key=='Escape')close()});
+$('shv').onclick=()=>{const m=shelves(),k=Object.keys(m).sort((a,b)=>a.localeCompare(b,'ar'));
+ $('sl').innerHTML=k.map(x=>`<button class="b" data-s="${esc(x)}">رف ${esc(x)} · ${m[x]} كتاب</button>`).join('')||'<p class="mu">لا توجد رفوف بعد. اكتب رقم الرف عند إضافة الكتب.</p>';show('rm')};
+$('sl').onclick=ev=>{const t=ev.target.closest('[data-s]');if(t)showShelf(t.dataset.s)};
+$('sbx').onclick=()=>{shelfF=null;render()};
+$('add').onclick=$('fab').onclick=()=>openForm();$('scan').onclick=scan;
+$('wn').onclick=()=>{qi++;wisdom()};
+['q','fc','fs'].forEach(i=>$(i).oninput=render);
+$('bkb').onclick=()=>{$('bt').value=JSON.stringify(books);show('bm')};
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText($('bt').value)}catch(x){$('bt').select();document.execCommand('copy')}toast('تم النسخ')};
+$('rest').onclick=()=>{try{const a=JSON.parse($('bt').value).filter(b=>b&&b.id&&b.title&&b.author);if(!a.length)throw 0;
+ if(!confirm('سيُستبدل فهرسك الحالي بالنسخة ('+a.length+' كتاب). متابعة؟'))return;books=a.map(b=>({st:'u',rate:0,fav:false,...b}));save();close();render();toast('تمت الاستعادة')}catch(x){toast('نص النسخة الاحتياطية غير صالح')}};
+const th=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.dataset.theme=th;
+$('th').onclick=()=>{const n=document.documentElement.dataset.theme=='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem('theme',n)}catch(x){}};
+
+$('fc').innerHTML='<option value="all">كل التصنيفات</option>'+Object.keys(CATS).map(k=>`<option>${k}</option>`).join('');
+$('f_category').innerHTML=Object.keys(CATS).map(k=>`<option>${k}</option>`).join('');
+wisdom();render();
+</script>
+</body>
+</html>

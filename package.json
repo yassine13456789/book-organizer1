@@ -1,0 +1,12 @@
+{
+  "name": "book-organizer-apk",
+  "version": "1.0.0",
+  "private": true,
+  "description": "منظّم كتب الوالد - يعمل بدون إنترنت",
+  "dependencies": {
+    "@capacitor/android": "latest",
+    "@capacitor/cli": "latest",
+    "@capacitor/core": "latest",
+    "@fontsource/cairo": "^5.0.0"
+  }
+}
